@@ -1,0 +1,110 @@
+version: '3'
+
+services:
+  reverse-proxy:
+    image: traefik:2.2
+    container_name: proxy_test
+    command:
+      - --providers.docker
+      - --entrypoints.web.address=:80
+      - --entrypoints.web-secure.address=:443
+      - --certificatesresolvers.le.acme.email=my@email.com
+      - --certificatesresolvers.le.acme.storage=/acme.json
+      - --certificatesresolvers.le.acme.tlschallenge=true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./acme.json:/acme.json
+    networks:
+      - test-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app_test
+    tty: true
+    environment:
+      XDEBUG_CONFIG: "remote_host=192.168.220.1 remote_enable=1"
+      PHP_IDE_CONFIG: "serverName=Docker"
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./docker/services/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - test-network
+
+  webserver:
+    image: nginx:alpine
+    container_name: webserver_test
+    tty: true
+    labels:
+      - traefik.http.routers.app_insecure.rule=Host(`${HOST}`)
+      - traefik.http.routers.app.rule=Host(`${HOST}`)
+      - traefik.http.routers.app.tls=true
+      - traefik.http.routers.app.tls.certresolver=le
+    #ports:
+    #  - "80:80"
+    #  - "443:443"
+    volumes:
+      - ./:/var/www
+      - ./docker/services/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - test-network
+
+  db:
+    image: mariadb:10.5
+    container_name: database_test
+    command:
+      - --log-error=/var/log/mysql/err.log
+      - --general-log=1
+      - --general-log-file=/var/log/mysql/general-log.log
+      - --character-set-server=utf8
+      - --collation-server=utf8_general_ci
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - ./docker/data/mariadb:/var/lib/mysql
+      - ./docker/logs/mysql:/var/log/mysql
+      - ./docker/services/mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - test-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: admin_test
+    environment:
+      PMA_HOST: database_test
+      PMA_USER: ${DB_USERNAME}
+      PMA_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    labels:
+      - traefik.http.routers.phpmyadmin_insecure.rule=Host(`db.${HOST}`)
+      - traefik.http.routers.phpmyadmin.rule=Host(`db.${HOST}`)
+      - traefik.http.routers.phpmyadmin.tls=true
+      - traefik.http.routers.phpmyadmin.tls.certresolver=le
+    networks:
+      - test-network
+    depends_on:
+      - db
+
+#Docker Networks
+networks:
+  test-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.220.0/28
+
+#Volumes
+volumes:
+  dbdata:
+    driver: local
