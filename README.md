@@ -31,6 +31,10 @@ $ docker run --rm -v $(pwd):/app composer install
 $ docker-compose build
 $ docker-compose up -d
 ```
+Так же не забудьте сгенерировать ключ:
+```sh
+$ docker exec app_test php artisan key:generate
+```
 
 После запуска, можете проверить статус запущенных контейнеров:
 ```sh
