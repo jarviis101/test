@@ -42,6 +42,7 @@ COPY --chown=www:www . /var/www
 
 RUN chown -R www:www /var/www
 RUN chmod -R 755 /var/www/storage
+RUN chmod -R 755 /var/www/bootstrap/cache
 
 # Change current user to www
 USER www

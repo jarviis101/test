@@ -45,6 +45,8 @@ $ docker-compose ps
 Если запуск был произведен успешно и Вы дописали строку в файле /etc/hosts:
 * Сайт: http://test.loc/
 * База данных: http://db.test.loc/
+* Swagger Api Doc: http://test.loc/api/documentation
+  
 
 #### Для запуска каких-либо команд консоли необходимо набрать команду в таком формате:
 ```sh
