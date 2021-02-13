@@ -10,29 +10,21 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Models\Drug;
 
 /**
- * @OA\Info(
- *      version="1.0.0",
- *      title="Laravel Api Test",
- *      description="Laravel Api Test",
- *      @OA\Contact(
- *          email="jarviis101@gmail.com"
- *      ),
- * )
- *
- * @OA\Server(
- *      url=L5_SWAGGER_CONST_HOST,
- *      description="Demo API Server"
- * )
  * @OA\Tag(
  *     name="Drugs",
- *     description="API Endpoints of Drugs"
+ *     description="API Endpoints"
  * )
  */
 class DrugApiController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('jwt.verify');
+    }
     /**
      * @OA\Get(
-     *      path="/drugs",
+     *      path="/v1/drugs",
+     *      security={{ "apiAuth": {} }},
      *      operationId="getDrugsList",
      *      tags={"Drugs"},
      *      summary="Get list of drugs",
@@ -64,7 +56,8 @@ class DrugApiController extends Controller
 
     /**
      * @OA\Get(
-     *      path="/drugs/{id}",
+     *      path="/v1/drugs/{id}",
+     *      security={{ "apiAuth": {} }},
      *      operationId="getDrugById",
      *      tags={"Drugs"},
      *      summary="Get drug info by ID",
@@ -106,12 +99,10 @@ class DrugApiController extends Controller
 
     }
 
-
     public function update(Request $request, $id)
     {
         //
     }
-
 
     public function destroy($id)
     {

@@ -15,7 +15,8 @@ $ cp .env.example .env
 $ composer install
 $ php artisan key:generate
 Заполните оставшиеся переменные .env файла
-$ php artisan config:cache
+$ php artisan jwt:secret
+$ php artisan migrate --seed
 $ php artisan serve
 ```
 После этих манипуляций, этот проект запуститься по URL-адресу указанному из .env файла. 
@@ -31,10 +32,9 @@ $ sudo chown -R $USER:$USER .
 Допишите строку в файле /etc/hosts (без кавычек): "127.0.0.1 test.loc db.test.loc"
 $ docker-compose build
 $ docker-compose up -d
-```
-Так же не забудьте сгенерировать ключ:
-```sh
 $ docker exec app_test php artisan key:generate
+$ docker exec app_test php artisan jwt:secret
+$ docker exec app_test php artisan migrate --seed
 ```
 
 После запуска, можете проверить статус запущенных контейнеров:
