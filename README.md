@@ -27,6 +27,7 @@ $ git clone https://github.com/jarviis101/test.git
 $ cd test
 $ cp .env.example .env
 $ docker run --rm -v $(pwd):/app composer install
+$ sudo chown -R $USER:$USER .
 Допишите строку в файле /etc/hosts (без кавычек): "127.0.0.1 test.loc db.test.loc"
 $ docker-compose build
 $ docker-compose up -d
