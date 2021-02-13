@@ -26,8 +26,8 @@ class DrugFactory extends Factory
         return [
             'name' => $this->faker->name,
             'price' => $this->faker->randomDigitNotNull,
-            'ingredient_id' => Ingredient::inRandomOrder()->first()->id,
-            'manufacturer_id' => Manufacturer::inRandomOrder()->first()->id,
+            'ingredient_id' => Ingredient::inRandomOrder()->first()['id'],
+            'manufacturer_id' => Manufacturer::inRandomOrder()->first()['id'],
         ];
     }
 }

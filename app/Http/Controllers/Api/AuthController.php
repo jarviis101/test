@@ -98,10 +98,12 @@ class AuthController extends Controller
      *          description="Register user",
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
-     *              @OA\Property(property="name", type="string"),
-     *              @OA\Property(property="email", type="string"),
-     *              @OA\Property(property="password", type="string"),
-     *              @OA\Property(property="password_confirmation", type="string"),
+     *              @OA\Schema(
+     *                  @OA\Property(property="name", type="string"),
+     *                  @OA\Property(property="email", type="string"),
+     *                  @OA\Property(property="password", type="string"),
+     *                  @OA\Property(property="password_confirmation", type="string")
+     *              )
      *          )
      *      ),
      *      @OA\Response(response="default", description="Successful operation")
