@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\DrugResource;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Log;
 
 use App\Models\Drug;
 
@@ -35,6 +36,10 @@ class DrugApiController extends Controller
      *          @OA\JsonContent(ref="#/components/schemas/DrugResource")
      *       ),
      *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
      *          response=401,
      *          description="Unauthenticated",
      *      ),
@@ -46,6 +51,7 @@ class DrugApiController extends Controller
      */
     public function index()
     {
+        Log::info('Get list of drugs');
         return new DrugResource(Drug::all());
     }
 
@@ -92,6 +98,7 @@ class DrugApiController extends Controller
      */
     public function show($id)
     {
+        Log::info('Get drug info by ID: '.$id);
         $drug = Drug::find($id);
         if (isset($drug)) {
             return new DrugResource($drug);

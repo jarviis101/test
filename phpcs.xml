@@ -29,6 +29,7 @@
        custom standard so you don't have to specify the
        patterns on the command line.
     -->
+    <exclude-pattern>*/public/index.php</exclude-pattern>
     <exclude-pattern>*/database/*</exclude-pattern>
     <exclude-pattern>*/cache/*</exclude-pattern>
     <exclude-pattern>*/*.js</exclude-pattern>

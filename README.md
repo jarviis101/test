@@ -61,3 +61,8 @@ $ docker exec -it app_test bash
 ```sh
 $ php artisan migrate
 ```
+
+#### Команда для запуска линтера:
+```sh
+$ ./vendor/bin/phpcs
+```

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use JWTAuth;
 use App\Http\Controllers\Controller;
-
+use Illuminate\Support\Facades\Log;
 
 use App\Models\User;
 
@@ -42,13 +42,28 @@ class AuthController extends Controller
      *              )
      *          )
      *      ),
-     *      @OA\Response(response="default", description="Successful operation")
+     *      @OA\Response(
+     *          response="200",
+     *          description="Successful operation"
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
      * )
      */
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-
+        Log::info('Login user by credentials');
 
         if ($token = JWTAuth::attempt($credentials)) {
             return $this->respondWithToken($token);
@@ -75,14 +90,14 @@ class AuthController extends Controller
      */
     public function me()
     {
+        Log::info('Show user info.');
         return response()->json(auth()->user());
     }
 
     public function logout()
     {
+        Log::info('Logout user.');
         auth()->logout();
-
-
         return response()->json(['message' => 'Successfully logged out']);
     }
 
@@ -111,7 +126,7 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-
+        Log::info('Validate rules.');
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -119,6 +134,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
+            Log::info('Validation error.');
             return response()->json([
                 'status' => 'error',
                 'success' => false,
@@ -132,6 +148,7 @@ class AuthController extends Controller
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
         ]);
+        Log::info('Create user.');
 
         return response()->json([
             'message' => 'User created.',
