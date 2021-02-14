@@ -72,5 +72,4 @@ class Manufacturer extends Model
     {
         return $this->belongsTo(Drug::class);
     }
-
 }

@@ -109,7 +109,8 @@ class AuthController extends Controller
      *      @OA\Response(response="default", description="Successful operation")
      * )
      */
-    public function register(Request $request){
+    public function register(Request $request)
+    {
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -117,7 +118,7 @@ class AuthController extends Controller
             'password' => 'required|string|min:6|confirmed',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
                 'success' => false,

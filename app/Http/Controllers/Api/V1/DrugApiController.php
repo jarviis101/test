@@ -93,10 +93,9 @@ class DrugApiController extends Controller
     public function show($id)
     {
         $drug = Drug::find($id);
-        if(isset($drug)){
+        if (isset($drug)) {
             return new DrugResource($drug);
         }
-
     }
 
     public function update(Request $request, $id)

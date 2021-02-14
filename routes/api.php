@@ -17,12 +17,12 @@ use Illuminate\Routing\Router;
 
 Route::group([
     'middleware' => 'api'
-], function (Router $router){
+], function (Router $router) {
     Route::group([
         'prefix' => 'v1',
         'as' => 'api.',
         'namespace' => 'Api\V1',
-    ], function(){
+    ], function () {
         Route::apiResource('drugs', 'DrugApiController');
     });
     Route::group([
@@ -35,5 +35,3 @@ Route::group([
         Route::post('me', [App\Http\Controllers\Api\AuthController::class, 'me']);
     });
 });
-
-
