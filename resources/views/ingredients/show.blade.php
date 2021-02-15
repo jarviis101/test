@@ -1,4 +1,6 @@
 @extends('layouts.main')
 @section('content')
-    <h2>Ingredient - {{$ingredient->name}}</h2>
+    <div class="innerIngredient">
+        <h2>Ingredient - {{$ingredient->name}}</h2>
+    </div>
 @endsection
