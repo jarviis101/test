@@ -1,18 +1,13 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\CreatesApplication;
-use Tests\TestCase;
-use App\Models\User;
 use RuntimeException;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+// use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class AuthTest extends TestCase
 {
-
     protected function token(): string
     {
         $loginData = [
@@ -37,7 +32,8 @@ class AuthTest extends TestCase
         return $content->access_token;
     }
 
-    public function testSuccessfulRegistration()
+    /** @test */
+    public function testSuccessfulRegistration(): void
     {
         $userData = [
             "name" => "John Doe",
@@ -46,21 +42,12 @@ class AuthTest extends TestCase
             "password_confirmation" => "password"
         ];
 
-        $this->json('POST', 'api/auth/register', $userData, ['Accept' => 'application/json'])
-            ->assertStatus(200)
-            ->assertJsonStructure([
-                "user" => [
-                    'id',
-                    'name',
-                    'email',
-                    'created_at',
-                    'updated_at',
-                ],
-                "message"
-            ]);
+        $response = $this->post('api/auth/register', $userData);
+        $response->assertStatus(200);
     }
 
-    public function testSuccessfulLogin()
+    /** @test */
+    public function testSuccessfulLogin(): void
     {
         $loginData = [
             "email" => "doe@example.com",
@@ -77,7 +64,8 @@ class AuthTest extends TestCase
             ]);
     }
 
-    public function testSuccessfulGetInfo()
+    /** @test */
+    public function testSuccessfulGetInfo(): void
     {
         $this->json('POST', 'api/auth/me', [
             'token' => $this->token()
@@ -93,7 +81,8 @@ class AuthTest extends TestCase
             ]);
     }
 
-    public function testSuccessfulLogout()
+    /** @test */
+    public function testSuccessfulLogout(): void
     {
         $this->json('POST', 'api/auth/logout', [
             'token' => $this->token()
@@ -104,7 +93,8 @@ class AuthTest extends TestCase
             ]);
     }
 
-    public function testSuccessfulRefreshToken()
+    /** @test */
+    public function testSuccessfulRefreshToken(): void
     {
         $this->json('POST', 'api/auth/refresh', [
             'token' => $this->token()
