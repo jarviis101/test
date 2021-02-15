@@ -14,8 +14,8 @@ $ cd test
 $ cp .env.example .env
 $ composer install
 $ php artisan key:generate
-Заполните оставшиеся переменные .env файла
 $ php artisan jwt:secret
+Заполните оставшиеся переменные .env файла если таковые имеются
 $ php artisan migrate --seed
 $ php artisan serve
 ```
@@ -41,18 +41,20 @@ $ docker exec app_test php artisan migrate --seed
 ```sh
 $ docker-compose ps
 ```
-
-Если запуск был произведен успешно и Вы дописали строку в файле /etc/hosts:
+Если запуск был произведен успешно и Вы соблюдали все инструкции:
 * Сайт: http://test.loc/
 * База данных: http://db.test.loc/
-* Swagger Api Doc: http://test.loc/api/documentation
-  
+* Api документация: http://test.loc/api/documentation
+
+Для доступа к api эндпоинтам необходим JWT токен. 
+Присутствует регистрация и авторизация. После авторизации вы получите ключ("access_token").
+При клике по кнопке "Authorize" необходимо заполнить поле с ключом, записывать в поле 
+только ключ без дополнительных строк.
 
 #### Для запуска каких-либо команд консоли необходимо набрать команду в таком формате:
 ```sh
 $ docker exec app_test php artisan config:cache
 ```
-
 #### Для альтернативного способа запуска команд:
 ```sh
 $ docker exec -it app_test bash
@@ -61,8 +63,46 @@ $ docker exec -it app_test bash
 ```sh
 $ php artisan migrate
 ```
-
+#### Команда для запуска юнит тестов:
+```sh
+$ php artisan test
+```
 #### Команда для запуска линтера:
 ```sh
 $ ./vendor/bin/phpcs
 ```
+Запись логов происходит в файле storage/logs/laravel.log (Исключения не попадают в лог)
+
+## Сущности:
+### Лекарственное средство - модель Drug: 
+Route: http://test.loc/drugs
+
+Имеет поля: id, name, price, manufacturer_id, ingredient_id, timestamps;
+  
+Имеет 2 связи к моделям Manufacturer и Ingredient;
+  
+Присутствует CRUD-контроллер и API-контроллер;
+  
+Присутствуют тесты.
+
+### Производитель - модель Manufacturer:
+Route: http://test.loc/manufacturers
+
+Имеет поля: id, name, link, timestamps;
+
+Имеет 1 связь к модели Drug;
+
+Присутствует CRUD-контроллер;
+
+Присутствуют тесты.
+
+### Действующее вещество - модель Ingredient:
+Route: http://test.loc/ingredients
+
+Имеет поля: id, name, timestamps;
+
+Имеет 1 связи к модели Drug;
+
+Присутствует CRUD-контроллер;
+
+Присутствуют тесты.
