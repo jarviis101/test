@@ -28,7 +28,7 @@ class Manufacturer extends Model
      * )
      * @var integer
      */
-    public $id;
+    private $id;
 
     /**
      * @OA\Property(
@@ -37,7 +37,7 @@ class Manufacturer extends Model
      * )
      * @var string
      */
-    public $name;
+    private $name;
 
     /**
      * @OA\Property(
@@ -46,7 +46,7 @@ class Manufacturer extends Model
      * )
      * @var string
      */
-    public $link;
+    private $link;
 
     /**
      * @OA\Property(

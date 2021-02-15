@@ -19,7 +19,7 @@ use Illuminate\Routing\Controller as BaseController;
  *
  * @OA\SecurityScheme(
  *     type="http",
- *     description="Login with email and password to get the authentication token",
+ *     description="Login with email and password to get the authentication token. Input only token",
  *     name="Authorization",
  *     in="header",
  *     scheme="bearer",

@@ -22,7 +22,7 @@ class Ingredient extends Model
      * )
      * @var integer
      */
-    public $id;
+    private $id;
 
     /**
      * @OA\Property(
@@ -31,7 +31,7 @@ class Ingredient extends Model
      * )
      * @var string
      */
-    public $name;
+    private $name;
 
     /**
      * @OA\Property(

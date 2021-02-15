@@ -14,5 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/drugs');
 });
+Route::resource('drugs', 'DrugController');
+Route::resource('manufacturers', 'ManufacturerController');
+Route::resource('ingredients', 'IngredientController');
